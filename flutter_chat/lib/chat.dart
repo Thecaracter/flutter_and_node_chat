@@ -16,7 +16,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     socket =
-        io.io('https://4x4mx23n-3000.asse.devtunnels.ms', <String, dynamic>{
+        io.io('https://4x4mx23n-9000.asse.devtunnels.ms', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
