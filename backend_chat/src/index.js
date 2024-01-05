@@ -11,32 +11,33 @@ const io = socketIo(server);
 app.use(express.json());
 
 io.on('connection', (socket) => {
-    console.log('User connected');
+    console.log(`User connected: ${socket.id}`);
+
+    // Handle setting and broadcasting usernames
+    socket.on('set username', (username) => {
+        socket.username = username;
+        // Broadcast a message that a new user has joined the chat
+        io.emit('chat message', { username: 'Server', message: `${username} has joined the chat` });
+        console.log(`User ${socket.id} set username to: ${username}`);
+    });
 
     // Handle chat events
     socket.on('chat message', (msg) => {
-        console.log(`User sent a message: ${msg}`);
-        io.emit('chat message', msg);
+        // Broadcast the received message to all connected clients, including the sender's username
+        io.emit('chat message', { username: socket.username, message: msg });
+        console.log(`User ${socket.id} sent a message: ${msg}`);
     });
 
     // Handle disconnect event
     socket.on('disconnect', () => {
-        console.log('User disconnected');
+        if (socket.username) {
+            // Broadcast a message that the user has left the chat
+            io.emit('chat message', { username: 'Server', message: `${socket.username} has left the chat` });
+            console.log(`User ${socket.id} disconnected (${socket.username})`);
+        } else {
+            console.log(`User ${socket.id} disconnected`);
+        }
     });
-});
-
-// Handle POST requests to the root endpoint
-app.post('/', (req, res) => {
-    const { message } = req.body;
-
-    if (message) {
-        // If the request contains a 'message' parameter, emit it using Socket.IO
-        io.emit('chat message', message);
-        res.send(`Received a POST request with message: ${message}`);
-    } else {
-        // If 'message' parameter is missing, return an error response
-        res.status(400).send('Bad Request: Missing "message" parameter');
-    }
 });
 
 // Add a simple status endpoint

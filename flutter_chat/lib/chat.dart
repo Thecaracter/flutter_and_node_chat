@@ -1,90 +1,232 @@
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Rizqi Chat'),
-      ),
-      body: ChatScreen(),
-    );
-  }
-}
-
 class ChatScreen extends StatefulWidget {
   @override
-  State createState() => _ChatScreenState();
+  _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final TextEditingController _controller = TextEditingController();
-  final List<String> _messages = [];
+  final TextEditingController _textController = TextEditingController();
+  final List<ChatMessage> _messages = <ChatMessage>[];
   late io.Socket socket;
+  String? currentUser;
 
   @override
   void initState() {
     super.initState();
-    // Ganti URL sesuai dengan URL backend server Anda
     socket =
         io.io('https://4x4mx23n-3000.asse.devtunnels.ms', <String, dynamic>{
       'transports': ['websocket'],
+      'autoConnect': false,
     });
 
-    socket.on('chat message', (data) {
-      setState(() {
-        _messages.add(data);
-      });
-    });
+    socket.on('chat message', _handleChatMessage);
+
+    socket.connect();
   }
 
-  void _sendMessage() {
-    socket.emit('chat message', _controller.text);
-    _controller.clear();
+  void _handleSubmitted(String text) {
+    if (_textController.text.isNotEmpty) {
+      socket.emit('chat message', _textController.text);
+      _textController.clear();
+    }
   }
 
-  @override
-  void dispose() {
-    // Tutup koneksi Socket.IO ketika widget dihapus
-    socket.disconnect();
-    super.dispose();
+  void _showUsernamePopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String _username = '';
+
+        return AlertDialog(
+          title: Text('Set Username'),
+          content: TextField(
+            onChanged: (value) {
+              _username = value;
+            },
+            decoration: InputDecoration(
+              hintText: 'Enter your username',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (_username.isNotEmpty) {
+                  currentUser = _username;
+                  _setUsername(_username);
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('Set'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _setUsername(String username) {
+    socket.emit('set username', username);
+  }
+
+  void _handleChatMessage(dynamic data) {
+    if (data['username'] != null && data['message'] != null) {
+      _messages.insert(
+        0,
+        ChatMessage(
+          username: data['username'],
+          text: data['message'],
+          isMe: data['username'] == currentUser,
+        ),
+      );
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: _messages.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(_messages[index]),
-              );
-            },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Coba Chat'),
+        backgroundColor: Color(0xFF83A2FF),
+      ),
+      body: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 20,
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your message...',
-                  ),
+          ElevatedButton(
+            onPressed: _showUsernamePopup,
+            child: Text(
+              'Set Username',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: Color(0xFF83A2FF),
+            ),
+          ),
+          Flexible(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8.0),
+              reverse: true,
+              itemBuilder: (_, int index) => _messages[index],
+              itemCount: _messages.length,
+            ),
+          ),
+          Divider(height: 1.0),
+          Container(
+            decoration: BoxDecoration(
+              color: Color(0xFFFFFBF5),
+            ),
+            child: _buildTextComposer(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextComposer() {
+    return IconTheme(
+      data: IconThemeData(
+        color: Color(0xFF83A2FF),
+      ),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          children: <Widget>[
+            Flexible(
+              child: TextField(
+                controller: _textController,
+                onSubmitted: _handleSubmitted,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration.collapsed(
+                  hintText: 'Send a message',
+                  hintStyle: TextStyle(color: Colors.grey),
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.send),
-                onPressed: _sendMessage,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () => _handleSubmitted(_textController.text),
+                color: Color(0xFF83A2FF),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
+      ),
+    );
+  }
+}
+
+class ChatMessage extends StatelessWidget {
+  final String username;
+  final String text;
+  final bool isMe;
+
+  ChatMessage({required this.username, required this.text, required this.isMe});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Row(
+        mainAxisAlignment:
+            isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (!isMe)
+            Container(
+              margin: const EdgeInsets.only(right: 16.0),
+              child: CircleAvatar(
+                child: Text(username[0]),
+                backgroundColor: Color(0xFF83A2FF),
+              ),
+            ),
+          Flexible(
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.7,
+              ),
+              decoration: BoxDecoration(
+                color: isMe ? Color(0xFF83A2FF) : Color(0xFFB4BDFF),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment:
+                    isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    username,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
