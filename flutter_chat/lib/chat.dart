@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -94,7 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Coba Chat'),
+        title: Text('Chat Flutter'),
         backgroundColor: Color(0xFF83A2FF),
       ),
       body: Column(
@@ -144,12 +145,21 @@ class _ChatScreenState extends State<ChatScreen> {
             Flexible(
               child: TextField(
                 controller: _textController,
-                onSubmitted: _handleSubmitted,
                 style: TextStyle(color: Colors.black),
                 decoration: InputDecoration.collapsed(
                   hintText: 'Send a message',
                   hintStyle: TextStyle(color: Colors.grey),
                 ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: IconButton(
+                icon: const Icon(Icons.emoji_emotions),
+                onPressed: () {
+                  _showEmojiPicker();
+                },
+                color: Color(0xFF83A2FF),
               ),
             ),
             Container(
@@ -163,6 +173,46 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showEmojiPicker() {
+    showDialog(
+      context: context,
+      builder: (BuildContext builder) {
+        return Dialog(
+          child: Container(
+            width: MediaQuery.of(context).size.width / 1.5,
+            height: MediaQuery.of(context).size.height / 2,
+            child: EmojiPicker(
+              onEmojiSelected: (category, Emoji emoji) {
+                _textController.text += emoji.emoji;
+              },
+              config: Config(
+                columns: 5,
+                emojiSizeMax: 32.0,
+                verticalSpacing: 0,
+                horizontalSpacing: 0,
+                initCategory: Category.RECENT,
+                bgColor: Colors.white,
+                indicatorColor: Colors.blue,
+                iconColor: Colors.black,
+                iconColorSelected: Colors.blue,
+                loadingIndicator: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  ),
+                ),
+                recentTabBehavior: RecentTabBehavior.POPULAR,
+                recentsLimit: 28,
+                noRecents: Text("no recent emojis"),
+                categoryIcons: CategoryIcons(),
+                buttonMode: ButtonMode.MATERIAL,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
