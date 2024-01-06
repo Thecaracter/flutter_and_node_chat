@@ -3,7 +3,10 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 
 class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _ChatScreenState createState() => _ChatScreenState();
 }
 
@@ -124,7 +127,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Divider(height: 1.0),
           Container(
             decoration: BoxDecoration(
-              color: Color(0xFFFFFBF5),
+              color: Color(0xFFEEF5FF),
             ),
             child: _buildTextComposer(),
           ),
@@ -142,16 +145,6 @@ class _ChatScreenState extends State<ChatScreen> {
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           children: <Widget>[
-            Flexible(
-              child: TextField(
-                controller: _textController,
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration.collapsed(
-                  hintText: 'Send a message',
-                  hintStyle: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
@@ -160,6 +153,19 @@ class _ChatScreenState extends State<ChatScreen> {
                   _showEmojiPicker();
                 },
                 color: Color(0xFF83A2FF),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Flexible(
+              child: TextField(
+                controller: _textController,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration.collapsed(
+                  hintText: 'Send a message',
+                  hintStyle: TextStyle(color: Colors.grey),
+                ),
               ),
             ),
             Container(
@@ -184,6 +190,7 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Container(
             width: MediaQuery.of(context).size.width / 1.5,
             height: MediaQuery.of(context).size.height / 2,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
             child: EmojiPicker(
               onEmojiSelected: (category, Emoji emoji) {
                 _textController.text += emoji.emoji;
@@ -247,7 +254,7 @@ class ChatMessage extends StatelessWidget {
                 maxWidth: MediaQuery.of(context).size.width * 0.7,
               ),
               decoration: BoxDecoration(
-                color: isMe ? Color(0xFF83A2FF) : Color(0xFFB4BDFF),
+                color: isMe ? Color(0xFF86B6F6) : Color(0xFFB4D4FF),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               padding: const EdgeInsets.all(10.0),
