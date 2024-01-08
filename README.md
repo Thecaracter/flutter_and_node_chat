@@ -3,7 +3,8 @@
 
 Proyek ini adalah aplikasi Flutter Chat sederhana.
 
-![Screenshot Aplikasi](foto/1.png)
+![Screenshot Aplikasi 1](foto/1.png | width=400)
+![Screenshot Aplikasi 2](foto/2.png | width=400)
 
 ## Menjalankan Aplikasi
 
