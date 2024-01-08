@@ -1,6 +1,4 @@
-Jika Anda ingin menambahkan gambar ke README di GitHub, Anda dapat menggunakan sintaks Markdown untuk menyisipkan gambar. Berikut adalah contoh cara menambahkan gambar ke README:
 
-```markdown
 # Flutter Chat
 
 Proyek ini adalah aplikasi Flutter Chat sederhana.
