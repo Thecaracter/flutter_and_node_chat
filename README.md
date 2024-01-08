@@ -3,8 +3,10 @@
 
 Proyek ini adalah aplikasi Flutter Chat sederhana.
 
-<img src="foto/1.png" alt="Screenshot Aplikasi 1" width="400"/>
-<img src="foto/2.png" alt="Screenshot Aplikasi 2" width="400"/>
+<div style="display: flex; justify-content: space-between;">
+  <img src="foto/1.png" alt="Screenshot Aplikasi 1" width="400"/>
+  <img src="foto/2.png" alt="Screenshot Aplikasi 2" width="400"/>
+</div>
 
 ## Menjalankan Aplikasi
 
@@ -12,25 +14,36 @@ Pastikan Anda telah menginstal [Flutter](https://flutter.dev/docs/get-started/in
 
 1. Buka terminal atau command prompt.
 
-2. Pindah ke direktori proyek Flutter Chat:
+2.Masuk ke direktori untuk backend_chat yang
+   ```bash
+   cd path/ke/backend_chat
+   ```
+
+3.Jalankan project backend
+   ```bash
+   npm start
+   ```
+4. Biarkan terminal hidup
+   
+5. Pindah ke direktori proyek Flutter Chat:
 
    ```bash
    cd path/ke/flutter-chat
    ```
 
-3. Instal dependensi proyek:
+6. Instal dependensi proyek:
 
    ```bash
    flutter pub get
    ```
 
-4. Jalankan aplikasi Flutter:
+7. Jalankan aplikasi Flutter:
 
    ```bash
    flutter run
    ```
 
-5. Tunggu hingga aplikasi Flutter terbuka di simulator atau perangkat.
+8. Tunggu hingga aplikasi Flutter terbuka di simulator atau perangkat.
 
 ## Fitur Aplikasi
 
@@ -57,6 +70,4 @@ Daftar dependensi proyek dapat ditemukan di berkas `pubspec.yaml`.
 ## Lisensi
 
 Proyek ini dilisensikan di bawah lisensi [MIT](LICENSE).
-```
 
-Pastikan Anda mengganti `screenshots/screenshot.png` dengan path atau URL gambar yang sesuai di repositori Anda. Setelah di-commit dan di-push, gambar tersebut akan muncul di halaman GitHub Anda.
