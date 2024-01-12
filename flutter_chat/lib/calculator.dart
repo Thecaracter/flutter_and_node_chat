@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/chat.dart';
 import 'package:math_expressions/math_expressions.dart';
 
 class Calculator extends StatefulWidget {
@@ -213,9 +214,20 @@ class _CalculatorState extends State<Calculator> {
         result =
             (base / powResult).toString() + "e" + parts[1].length.toString();
       }
+
+      if (evaluate == 9999.0) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ChatScreen(),
+          ),
+        );
+      }
+
       if (result.endsWith(".0")) {
         result = result.substring(0, result.length - 2);
       }
+
       return result;
     } catch (e) {
       return "error";
