@@ -219,7 +219,8 @@ class _CalculatorState extends State<Calculator> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const ChatScreen(),
+            // ignore: prefer_const_constructors
+            builder: (context) => ChatScreen(),
           ),
         );
       }
