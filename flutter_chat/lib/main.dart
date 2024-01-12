@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat/calculator.dart';
-import 'chat.dart';
 
 void main() {
   runApp(MyApp());
