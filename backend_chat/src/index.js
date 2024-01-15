@@ -1,8 +1,8 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-const multer = require('multer'); // Add this line
-const fs = require('fs');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
@@ -11,23 +11,32 @@ const io = socketIo(server);
 // Use express.json() middleware to parse JSON bodies
 app.use(express.json());
 
+// Use express.urlencoded() middleware to parse form data
+app.use(express.urlencoded({ extended: true }));
+
 // Set up multer for handling file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'assets/');
+        cb(null, 'src/assets/');
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname);
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
     },
 });
 const upload = multer({ storage: storage });
 
+// Middleware untuk menyajikan file statis dari direktori 'assets/'
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
 app.post('/upload', upload.single('file'), (req, res) => {
     const file = req.file;
     // Broadcast the file message to all connected clients, including the sender's username
-    io.emit('file message', { username: req.body.username, fileName: file.originalname });
+    io.emit('file message', { username: req.body.username, fileName: file.filename });
+    console.log(`File uploaded by ${req.body.username}: ${file.filename}`);
     res.send('File uploaded successfully');
 });
+
 
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}`);
