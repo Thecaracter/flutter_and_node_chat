@@ -199,7 +199,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Chat'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xff7FC7D9),
       ),
       body: Column(
         children: <Widget>[
@@ -213,7 +213,9 @@ class _ChatScreenState extends State<ChatScreen> {
               style: TextStyle(color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
-              primary: Colors.blue,
+              primary: Color(0xff7FC7D9),
+              shadowColor: Colors.grey, // Warna bayangan
+              elevation: 5, // Tingkat elevasi
             ),
           ),
           Flexible(
@@ -330,7 +332,7 @@ class ChatMessage extends StatelessWidget {
               margin: const EdgeInsets.only(right: 16.0),
               child: CircleAvatar(
                 child: Text(username[0]),
-                backgroundColor: Colors.blue,
+                backgroundColor: Color(0xff7BD3EA),
               ),
             ),
           Flexible(
@@ -339,7 +341,7 @@ class ChatMessage extends StatelessWidget {
                 maxWidth: MediaQuery.of(context).size.width * 0.7,
               ),
               decoration: BoxDecoration(
-                color: isMe ? Colors.lightBlue : Colors.blue,
+                color: isMe ? Color(0xff86B6F6) : Color(0xff7BD3EA),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               padding: const EdgeInsets.all(10.0),
