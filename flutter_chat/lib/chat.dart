@@ -1,12 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'dart:io';
+import 'package:dio/dio.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _ChatScreenState createState() => _ChatScreenState();
 }
 
@@ -19,19 +22,23 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    // Initialize Socket.IO connection
     socket =
         io.io('https://4x4mx23n-9000.asse.devtunnels.ms', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
 
+    // Set up event listener for incoming chat messages
     socket.on('chat message', _handleChatMessage);
 
+    // Connect to the Socket.IO server
     socket.connect();
   }
 
   void _handleSubmitted(String text) {
     if (_textController.text.isNotEmpty) {
+      // Send the chat message to the server
       socket.emit('chat message', _textController.text);
       _textController.clear();
     }
@@ -64,6 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () {
                 if (_username.isNotEmpty) {
                   currentUser = _username;
+                  // Set the username and emit an event to the server
                   _setUsername(_username);
                   Navigator.of(context).pop();
                 }
@@ -77,11 +85,13 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _setUsername(String username) {
+    // Emit an event to the server to set the username
     socket.emit('set username', username);
   }
 
   void _handleChatMessage(dynamic data) {
     if (data['username'] != null && data['message'] != null) {
+      // Handle incoming chat messages
       _messages.insert(
         0,
         ChatMessage(
@@ -91,6 +101,31 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       );
       setState(() {});
+    }
+  }
+
+  Future<void> _sendFile() async {
+    XFile? pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      File file = File(pickedImage.path);
+
+      Dio dio = Dio();
+
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(file.path),
+        'username': currentUser,
+      });
+
+      try {
+        await dio.post(
+          'https://4x4mx23n-9000.asse.devtunnels.ms/upload',
+          data: formData,
+        );
+      } catch (e) {
+        print('Error sending file: $e');
+      }
     }
   }
 
@@ -110,6 +145,16 @@ class _ChatScreenState extends State<ChatScreen> {
             onPressed: _showUsernamePopup,
             child: Text(
               'Set Username',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: Color(0xFF83A2FF),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: _sendFile,
+            child: Text(
+              'Send File',
               style: TextStyle(color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
