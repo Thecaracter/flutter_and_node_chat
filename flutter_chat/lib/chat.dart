@@ -216,16 +216,6 @@ class _ChatScreenState extends State<ChatScreen> {
               primary: Colors.blue,
             ),
           ),
-          ElevatedButton(
-            onPressed: _sendFile,
-            child: Text(
-              'Send File',
-              style: TextStyle(color: Colors.white),
-            ),
-            style: ElevatedButton.styleFrom(
-              primary: Colors.blue,
-            ),
-          ),
           Flexible(
             child: ListView.builder(
               padding: const EdgeInsets.all(8.0),
@@ -255,6 +245,16 @@ class _ChatScreenState extends State<ChatScreen> {
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           children: <Widget>[
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: IconButton(
+                icon: const Icon(Icons.image_rounded),
+                onPressed: () {
+                  _sendFile();
+                },
+                color: Colors.blue,
+              ),
+            ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
