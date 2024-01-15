@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -152,6 +153,47 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  void _showEmojiPicker() {
+    showDialog(
+      context: context,
+      builder: (BuildContext builder) {
+        return Dialog(
+          child: Container(
+            width: MediaQuery.of(context).size.width / 1.5,
+            height: MediaQuery.of(context).size.height / 2,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+            child: EmojiPicker(
+              onEmojiSelected: (category, Emoji emoji) {
+                _textController.text += emoji.emoji;
+              },
+              config: Config(
+                columns: 5,
+                emojiSizeMax: 32.0,
+                verticalSpacing: 0,
+                horizontalSpacing: 0,
+                initCategory: Category.RECENT,
+                bgColor: Colors.white,
+                indicatorColor: Colors.blue,
+                iconColor: Colors.black,
+                iconColorSelected: Colors.blue,
+                loadingIndicator: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  ),
+                ),
+                recentTabBehavior: RecentTabBehavior.POPULAR,
+                recentsLimit: 28,
+                noRecents: Text("no recent emojis"),
+                categoryIcons: CategoryIcons(),
+                buttonMode: ButtonMode.MATERIAL,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -218,7 +260,7 @@ class _ChatScreenState extends State<ChatScreen> {
               child: IconButton(
                 icon: const Icon(Icons.emoji_emotions),
                 onPressed: () {
-                  // You can implement emoji picker here if needed
+                  _showEmojiPicker();
                 },
                 color: Colors.blue,
               ),
@@ -335,7 +377,7 @@ class ChatMessage extends StatelessWidget {
   }
 
   Widget _buildFileMessage(BuildContext context) {
-    Future<void> _downloadFile(String fileName) async {
+    Future<void> downloadFile(String fileName) async {
       try {
         var url = Uri.parse(
             'https://4x4mx23n-9000.asse.devtunnels.ms/assets/$fileName');
@@ -374,7 +416,7 @@ class ChatMessage extends StatelessWidget {
         ElevatedButton(
           onPressed: () async {
             // Handle download action here
-            await _downloadFile(fileName!);
+            await downloadFile(fileName!);
           },
           child: Text('Download'),
         ),
