@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat/constant/api.dart';
+import 'package:flutter_chat/constant/color.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:dio/dio.dart';
@@ -228,7 +229,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Chat'),
-        backgroundColor: Color(0xff7FC7D9),
+        backgroundColor: ColorConstant.Primary,
       ),
       body: Column(
         children: <Widget>[
@@ -242,7 +243,7 @@ class _ChatScreenState extends State<ChatScreen> {
               style: TextStyle(color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
-              primary: Color(0xff7FC7D9),
+              primary: ColorConstant.Primary,
               shadowColor: Colors.grey, // Warna bayangan
               elevation: 5, // Tingkat elevasi
             ),
@@ -361,7 +362,7 @@ class ChatMessage extends StatelessWidget {
               margin: const EdgeInsets.only(right: 16.0),
               child: CircleAvatar(
                 child: Text(username[0]),
-                backgroundColor: Color(0xff7BD3EA),
+                backgroundColor: ColorConstant.IsNotMe,
               ),
             ),
           Flexible(
@@ -370,7 +371,7 @@ class ChatMessage extends StatelessWidget {
                 maxWidth: MediaQuery.of(context).size.width * 0.7,
               ),
               decoration: BoxDecoration(
-                color: isMe ? Color(0xff86B6F6) : Color(0xff7BD3EA),
+                color: isMe ? ColorConstant.IsMe : ColorConstant.IsNotMe,
                 borderRadius: BorderRadius.circular(8.0),
               ),
               padding: const EdgeInsets.all(10.0),
