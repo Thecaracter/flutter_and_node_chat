@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/constant/api.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:dio/dio.dart';
@@ -26,8 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     // Initialize Socket.IO connection
-    socket =
-        io.io('https://4x4mx23n-9000.asse.devtunnels.ms/', <String, dynamic>{
+    socket = io.io(ApiConstant.BASE_URL, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -141,7 +141,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
       try {
         await dio.post(
-          'https://4x4mx23n-9000.asse.devtunnels.ms/upload',
+          ApiConstant.Uploud,
           data: formData,
         );
 
