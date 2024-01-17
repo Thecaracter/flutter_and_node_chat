@@ -4,11 +4,12 @@
 Proyek ini adalah aplikasi Flutter Chat sederhana.
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="foto/1.png" alt="Screenshot Aplikasi 1" width="300"/>
-  <img src="foto/2.png" alt="Screenshot Aplikasi 2" width="300"/>
-  <img src="foto/3.png" alt="Screenshot Aplikasi 3" width="300"/>
-  <img src="foto/4.png" alt="Screenshot Aplikasi 4" width="300"/>
+  <img src="foto/1.png" alt="Screenshot Aplikasi 1" style="width: 300px; height: auto;"/>
+  <img src="foto/2.png" alt="Screenshot Aplikasi 2" style="width: 300px; height: auto;"/>
+  <img src="foto/3.png" alt="Screenshot Aplikasi 3" style="width: 300px; height: auto;"/>
+  <img src="foto/4.png" alt="Screenshot Aplikasi 4" style="width: 300px; height: auto;"/>
 </div>
+
 
 ## Menjalankan Aplikasi
 
