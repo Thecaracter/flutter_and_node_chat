@@ -133,9 +133,29 @@ class _ChatScreenState extends State<ChatScreen> {
 
       Dio dio = Dio();
 
+      // Show CircularProgressIndicator
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevent user from dismissing the dialog
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Uploading...'),
+              ],
+            ),
+          );
+        },
+      );
+
       FormData formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(file.path,
-            filename: file.path.split('/').last),
+        'file': await MultipartFile.fromFile(
+          file.path,
+          filename: file.path.split('/').last,
+        ),
         'username': currentUser,
       });
 
@@ -143,10 +163,19 @@ class _ChatScreenState extends State<ChatScreen> {
         await dio.post(
           ApiConstant.Uploud,
           data: formData,
+          onSendProgress: (int sent, int total) {
+            // You can update progress if needed
+          },
         );
+
+        // Hide CircularProgressIndicator
+        Navigator.pop(context);
 
         // Optionally, you can handle the success response from the server here.
       } catch (e) {
+        // Hide CircularProgressIndicator
+        Navigator.pop(context);
+
         print('Error sending file: $e');
         // Handle the error as needed.
       }
@@ -381,8 +410,7 @@ class ChatMessage extends StatelessWidget {
   Widget _buildFileMessage(BuildContext context) {
     Future<void> downloadFile(String fileName) async {
       try {
-        var url = Uri.parse(
-            'https://4x4mx23n-9000.asse.devtunnels.ms/assets/$fileName');
+        var url = Uri.parse(ApiConstant.ImageInSend + '$fileName');
         var response = await http.get(url);
 
         if (response.statusCode == 200) {
@@ -405,14 +433,34 @@ class ChatMessage extends StatelessWidget {
 
     return Column(
       children: [
-        Container(
-          margin: const EdgeInsets.only(top: 5.0),
-          child: CachedNetworkImage(
-            imageUrl:
-                'https://4x4mx23n-9000.asse.devtunnels.ms/assets/$fileName',
-            width: 200,
-            height: 200,
-            fit: BoxFit.cover,
+        Hero(
+          tag: 'imageHero', // Unique tag for the hero animation
+          child: GestureDetector(
+            onTap: () {
+              // Show the image in a pop-up or navigate to a new screen
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    child: CachedNetworkImage(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      imageUrl: ApiConstant.ImageInSend + '$fileName',
+                      fit: BoxFit.cover, // Adjust the fit property as needed
+                    ),
+                  );
+                },
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.only(top: 5.0),
+              child: CachedNetworkImage(
+                imageUrl: ApiConstant.ImageInSend + '$fileName',
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
         ElevatedButton(
