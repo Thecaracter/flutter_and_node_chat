@@ -15,6 +15,7 @@ class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ChatScreenState createState() => _ChatScreenState();
 }
 
@@ -53,15 +54,15 @@ class _ChatScreenState extends State<ChatScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String _username = '';
+        String username = '';
 
         return AlertDialog(
-          title: Text('Set Username'),
+          title: const Text('Set Username'),
           content: TextField(
             onChanged: (value) {
-              _username = value;
+              username = value;
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Enter your username',
             ),
           ),
@@ -74,10 +75,10 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             TextButton(
               onPressed: () {
-                if (_username.isNotEmpty) {
-                  currentUser = _username;
+                if (username.isNotEmpty) {
+                  currentUser = username;
                   // Set the username and emit an event to the server
-                  _setUsername(_username);
+                  _setUsername(username);
                   Navigator.of(context).pop();
                 }
               },
