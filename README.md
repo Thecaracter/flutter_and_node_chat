@@ -8,7 +8,8 @@ Proyek ini adalah aplikasi Flutter Chat sederhana.
   <img src="foto/2.png" alt="Screenshot Aplikasi 2" style="width: 300px; height: auto;"/>
   <img src="foto/3.png" alt="Screenshot Aplikasi 3" style="width: 300px; height: auto;"/>
   <img src="foto/4.png" alt="Screenshot Aplikasi 4" style="width: 300px; height: auto;"/>
-   <img src="foto/5.png" alt="Screenshot Aplikasi 5" style="width: 300px; height: auto;"/>
+  <img src="foto/5.png" alt="Screenshot Aplikasi 5" style="width: 300px; height: auto;"/>
+  <img src="foto/6.png" alt="Screenshot Aplikasi 6" style="width: 300px; height: auto;"/>
 </div>
 
 
