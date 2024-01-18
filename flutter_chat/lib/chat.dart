@@ -82,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   Navigator.of(context).pop();
                 }
               },
-              child: Text('Set'),
+              child: const Text('Set'),
             ),
           ],
         );
