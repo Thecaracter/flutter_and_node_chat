@@ -71,7 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -134,13 +134,12 @@ class _ChatScreenState extends State<ChatScreen> {
       File file = File(pickedFile.path);
 
       Dio dio = Dio();
-
-      // Show CircularProgressIndicator
+      // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         barrierDismissible: false, // Prevent user from dismissing the dialog
         builder: (BuildContext context) {
-          return AlertDialog(
+          return const AlertDialog(
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -170,12 +169,10 @@ class _ChatScreenState extends State<ChatScreen> {
           },
         );
 
-        // Hide CircularProgressIndicator
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
-
-        // Optionally, you can handle the success response from the server here.
       } catch (e) {
-        // Hide CircularProgressIndicator
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
 
         print('Error sending file: $e');
@@ -197,7 +194,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onEmojiSelected: (category, Emoji emoji) {
                 _textController.text += emoji.emoji;
               },
-              config: Config(
+              config: const Config(
                 columns: 5,
                 emojiSizeMax: 32.0,
                 verticalSpacing: 0,
@@ -229,17 +226,17 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Chat'),
+        title: const Text('Flutter Chat'),
         backgroundColor: ColorConstant.Primary,
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           ElevatedButton(
             onPressed: _showUsernamePopup,
-            child: Text(
+            child: const Text(
               'Set Username',
               style: TextStyle(color: Colors.white),
             ),
@@ -257,7 +254,7 @@ class _ChatScreenState extends State<ChatScreen> {
               itemCount: _messages.length,
             ),
           ),
-          Divider(height: 1.0),
+          const Divider(height: 1.0),
           Container(
             decoration: BoxDecoration(
               color: Colors.grey[200],
@@ -271,7 +268,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildTextComposer() {
     return IconTheme(
-      data: IconThemeData(
+      data: const IconThemeData(
         color: Colors.blue,
       ),
       child: Container(
@@ -298,14 +295,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 color: Colors.blue,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Flexible(
               child: TextField(
                 controller: _textController,
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration.collapsed(
+                style: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration.collapsed(
                   hintText: 'Send a message',
                   hintStyle: TextStyle(color: Colors.grey),
                 ),
@@ -382,7 +379,7 @@ class ChatMessage extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     username,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -394,7 +391,7 @@ class ChatMessage extends StatelessWidget {
                       margin: const EdgeInsets.only(top: 5.0),
                       child: Text(
                         text,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                         ),
                       ),
@@ -470,7 +467,7 @@ class ChatMessage extends StatelessWidget {
             // Handle download action here
             await downloadFile(fileName!);
           },
-          child: Text('Download'),
+          child: const Text('Download'),
         ),
       ],
     );
