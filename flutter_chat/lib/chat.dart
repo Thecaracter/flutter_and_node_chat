@@ -236,14 +236,14 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           ElevatedButton(
             onPressed: _showUsernamePopup,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ColorConstant.Primary,
+              shadowColor: Colors.grey, // Warna bayangan
+              elevation: 5, // Tingkat elevasi
+            ),
             child: const Text(
               'Set Username',
               style: TextStyle(color: Colors.white),
-            ),
-            style: ElevatedButton.styleFrom(
-              primary: ColorConstant.Primary,
-              shadowColor: Colors.grey, // Warna bayangan
-              elevation: 5, // Tingkat elevasi
             ),
           ),
           Flexible(
