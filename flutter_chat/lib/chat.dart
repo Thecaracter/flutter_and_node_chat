@@ -175,6 +175,7 @@ class _ChatScreenState extends State<ChatScreen> {
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
 
+        // ignore: avoid_print
         print('Error sending file: $e');
         // Handle the error as needed.
       }
@@ -359,8 +360,8 @@ class ChatMessage extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(right: 16.0),
               child: CircleAvatar(
-                child: Text(username[0]),
                 backgroundColor: ColorConstant.IsNotMe,
+                child: Text(username[0]),
               ),
             ),
           Flexible(
